@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import supabase from "../config/supabase";
+import { Link } from "react-router-dom";
+import toPascalCase from "../utils/toPascalCase";
 
 const FoodItems = () => {
   const [foodItems, setFoodItems] = useState([]);
@@ -16,11 +18,6 @@ const FoodItems = () => {
     await supabase.from("foods").delete().eq("id", id);
     getFoods();
   };
-
-  const toPascalCase = (s) =>
-    s.replace(/(\w)(\w*)/g, function (g0, g1, g2) {
-      return g1.toUpperCase() + g2.toLowerCase();
-    });
 
   useEffect(() => {
     getFoods();
@@ -64,17 +61,19 @@ const FoodItems = () => {
                 <td className="px-6 py-4">{foodItem.protein}g</td>
                 <td className="px-6 py-4">{foodItem.fat}g</td>
                 <td className="px-6 py-4">{foodItem.carbs}g</td>
-                <td className="flex justify-around items-center px-6 py-4">
-                  <svg
-                    className="cursor-pointer hover:fill-blue-200"
-                    xmlns="http://www.w3.org/2000/svg"
-                    height="24px"
-                    viewBox="0 -960 960 960"
-                    width="24px"
-                    fill="#5f6368"
-                  >
-                    <path d="M200-200h57l391-391-57-57-391 391v57Zm-80 80v-170l528-527q12-11 26.5-17t30.5-6q16 0 31 6t26 18l55 56q12 11 17.5 26t5.5 30q0 16-5.5 30.5T817-647L290-120H120Zm640-584-56-56 56 56Zm-141 85-28-29 57 57-29-28Z" />
-                  </svg>
+                <td className="flex space-x-4 px-6 py-4">
+                  <Link to={`/edit/${foodItem.id}`}>
+                    <svg
+                      className="cursor-pointer hover:fill-blue-200"
+                      xmlns="http://www.w3.org/2000/svg"
+                      height="24px"
+                      viewBox="0 -960 960 960"
+                      width="24px"
+                      fill="#5f6368"
+                    >
+                      <path d="M200-200h57l391-391-57-57-391 391v57Zm-80 80v-170l528-527q12-11 26.5-17t30.5-6q16 0 31 6t26 18l55 56q12 11 17.5 26t5.5 30q0 16-5.5 30.5T817-647L290-120H120Zm640-584-56-56 56 56Zm-141 85-28-29 57 57-29-28Z" />
+                    </svg>
+                  </Link>
                   <svg
                     className="cursor-pointer hover:fill-red-400"
                     xmlns="http://www.w3.org/2000/svg"

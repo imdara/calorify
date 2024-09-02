@@ -1,8 +1,10 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import {
   CreateFoodItem,
+  EditFoodItem,
   FoodItems,
   Home,
+  MyDiet,
   Navbar,
   Signin,
   Signup,
@@ -62,6 +64,24 @@ const App = () => {
         <>
           <Navbar />
           <Signup />
+        </>
+      ),
+    },
+    {
+      path: "/edit/:id",
+      element: (
+        <>
+          <Navbar />
+          <EditFoodItem />
+        </>
+      ),
+    },
+    {
+      path: "/my-diet",
+      element: (
+        <>
+          <Navbar />
+          <MyDiet />
         </>
       ),
     },
