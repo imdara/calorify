@@ -1,9 +1,31 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import MealForm from "./MealForm";
+import supabase from "../config/supabase";
 
 const MyDiet = () => {
-  const [calories, setCalories] = useState(250);
+  const [calories, setCalories] = useState(0);
   const [meals, setMeals] = useState([]);
+
+  const getMeals = async () => {
+    const { data, error } = await supabase.from("meals").select("*");
+    // .order("date", { ascending: false });
+    if (error) {
+      console.error("Error fetching meals:", error);
+      return;
+    } else {
+      setCalories(
+        data.map((meal) => meal.totalCalories).reduce((a, b) => a + b, 0)
+      );
+      setMeals(data);
+    }
+  };
+  useEffect(() => {
+    getMeals();
+    console.log("got meals");
+  }, []);
+  useEffect(() => {
+    console.log("meals updated");
+  }, [meals]);
   return (
     <>
       <h2 className="text-center text-lg font-bold mt-2">My Diet</h2>
@@ -64,13 +86,15 @@ const MyDiet = () => {
             <span>{meal.name}</span>
             <p>
               <span className="font-bold">Food/s:</span>{" "}
-              {meal.foods.map((food) => (
-                <span>{food.name}, </span>
+              {meal.foods.map((foodObj, i, arr) => (
+                <span>
+                  {foodObj.food.name} {foodObj.quantity}g
+                  {arr.length > 1 ? ", " : ""}
+                </span>
               ))}
             </p>
             <p>
-              <span className="font-bold">Calories:</span>{" "}
-              {meal.foods.reduce((a, b) => a.calories + b.calories, 0)}
+              <span className="font-bold">Calories:</span> {meal.totalCalories}
             </p>
           </div>
         ))}
